@@ -1,11 +1,11 @@
-# TCP Connection Lifecycle
+# TCP connection lifecycle
 
 **Question:** Can I identify a TCP session from setup through teardown and point
 to where TLS begins?
 
 Capture file: `../captures/01-tcp-handshake.pcapng`
 
-## How The Capture Was Made
+## How the capture was made
 
 Target: `github.com` resolved to `140.82.113.4`.
 
@@ -20,7 +20,7 @@ curl -4 --http1.1 --no-keepalive \
 
 The `.pcap` output was converted to `.pcapng` with `tools/convert-pcap-to-pcapng.py`.
 
-## What To Look At In Wireshark
+## What to look at in Wireshark
 
 Display filter:
 
@@ -52,7 +52,7 @@ The reset appears after both sides have already exchanged FINs. I would not
 treat that as a failed connection; the HTTP request completed and curl closed
 the socket.
 
-## Annotated Views
+## Wireshark screenshots
 
 ![TCP handshake](../screenshots/01-tcp-handshake.png)
 

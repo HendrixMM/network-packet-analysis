@@ -15,11 +15,11 @@ capture rather than from a protocol diagram.
 4. **HTTP vs HTTPS payload visibility**: the same host over ports 80 and 443,
    showing cleartext HTTP headers beside encrypted TLS application data.
 
-## Repository Layout
+## Repository layout
 
 - `captures/`: packet captures in `.pcapng` format
 - `writeups/`: short analysis notes tied to the captures
-- `screenshots/`: annotated packet views referenced from the writeups
+- `screenshots/`: Wireshark GUI screenshots referenced from the writeups
 - `tools/`: small helper used to convert tcpdump `.pcap` files to `.pcapng`
 
 ## Reproducing

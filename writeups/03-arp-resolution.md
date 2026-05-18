@@ -1,11 +1,11 @@
-# ARP Resolution
+# ARP resolution
 
 **Question:** What has to happen at layer 2 before an ICMP packet can reach a
 host on the same LAN?
 
 Capture file: `../captures/03-arp-resolution.pcapng`
 
-## How The Capture Was Made
+## How the capture was made
 
 The ideal command is a cache flush followed by a ping:
 
@@ -19,7 +19,7 @@ In this run, `sudo` was not available inside the automation session, so I used
 an uncached LAN address instead. A short scan found `192.168.2.21`, then the
 capture was filtered down to that ARP and ICMP exchange.
 
-## What To Look At In Wireshark
+## What to look at in Wireshark
 
 Display filter:
 
@@ -46,7 +46,7 @@ frame directly to `20:50:e7:59:0a:10`:
 The IP address identifies the peer at layer 3. ARP supplies the destination
 MAC address needed to put the frame on the local link.
 
-## Annotated Views
+## Wireshark screenshots
 
 ![ARP request and reply](../screenshots/03-arp-request-reply.png)
 

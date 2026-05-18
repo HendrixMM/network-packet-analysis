@@ -1,11 +1,11 @@
-# HTTP vs HTTPS Payload Visibility
+# HTTP vs HTTPS payload visibility
 
 **Question:** What changes on the wire when the same host is reached over HTTP
 and HTTPS?
 
 Capture file: `../captures/04-http-vs-https.pcapng`
 
-## How The Capture Was Made
+## How the capture was made
 
 Target: `httpforever.com` resolved to `146.190.62.39`.
 
@@ -25,7 +25,7 @@ curl -4 --http1.1 --no-keepalive -k \
 The `-k` flag was used because the host's HTTPS certificate was expired at the
 time of capture. The TLS session still demonstrates payload encryption.
 
-## What To Look At In Wireshark
+## What to look at in Wireshark
 
 Cleartext HTTP filter:
 
@@ -56,7 +56,7 @@ That difference matters when debugging security products. Packet capture can
 still prove that a connection was made, where it went, and whether bytes moved.
 It cannot expose protected application data without TLS keys or endpoint logs.
 
-## Annotated Views
+## Wireshark screenshots
 
 ![HTTP request in cleartext](../screenshots/04-http-cleartext.png)
 

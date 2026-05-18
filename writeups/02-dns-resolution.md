@@ -1,10 +1,10 @@
-# DNS Resolution Path
+# DNS resolution path
 
 **Question:** Can I tie a DNS answer to the TCP connection that uses it?
 
 Capture file: `../captures/02-dns-resolution.pcapng`
 
-## How The Capture Was Made
+## How the capture was made
 
 Target: `neverssl.com`; local resolver: `192.168.2.1`; A record:
 `34.223.124.45`.
@@ -23,7 +23,7 @@ curl -4 --http1.1 --no-keepalive \
 `dig` forces the DNS query into the capture. The curl command pins the TCP
 connection to the same address returned by the query.
 
-## What To Look At In Wireshark
+## What to look at in Wireshark
 
 DNS filter:
 
@@ -56,7 +56,7 @@ The next connection goes to the returned IP:
 The DNS answer does not move user data by itself. It supplies the address used
 by the transport-layer connection that follows.
 
-## Annotated Views
+## Wireshark screenshots
 
 ![DNS query and answer](../screenshots/02-dns-query-response.png)
 
