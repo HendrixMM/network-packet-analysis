@@ -7,17 +7,21 @@ Capture file: `../captures/03-arp-resolution.pcapng`
 
 ## How the capture was made
 
-The ideal command is a cache flush followed by a ping:
+The capture uses ARP and ICMP only:
 
 ```zsh
-sudo arp -ad
-tcpdump -i en0 -s 0 -n -w captures/03-arp-resolution.pcap "arp or icmp"
-ping -c 1 192.168.2.1
+dumpcap -i en0 -s 0 \
+  -w captures/03-arp-resolution.pcapng \
+  -a duration:8 \
+  -f \
+  "arp or icmp"
+
+ping -c 1 192.168.2.21
 ```
 
-In this run, `sudo` was not available inside the automation session, so I used
-an uncached LAN address instead. A short scan found `192.168.2.21`, then the
-capture was filtered down to that ARP and ICMP exchange.
+In this capture I used an uncached LAN address rather than flushing the ARP
+cache, since the host's existing cache entry for the router would have
+suppressed a fresh ARP exchange.
 
 ## What to look at in Wireshark
 
@@ -45,6 +49,10 @@ frame directly to `20:50:e7:59:0a:10`:
 
 The IP address identifies the peer at layer 3. ARP supplies the destination
 MAC address needed to put the frame on the local link.
+
+The timing shows the dependency clearly: the ARP reply arrives at
+`17:14:33.546893-0400`, and the ICMP echo request leaves 144 microseconds
+later.
 
 ## Wireshark screenshots
 

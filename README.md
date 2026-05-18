@@ -20,15 +20,14 @@ capture rather than from a protocol diagram.
 - `captures/`: packet captures in `.pcapng` format
 - `writeups/`: short analysis notes tied to the captures
 - `screenshots/`: Wireshark GUI screenshots referenced from the writeups
-- `tools/`: small helper used to convert tcpdump `.pcap` files to `.pcapng`
 
 ## Reproducing
 
 Open any file in `captures/` with Wireshark 4.x. The writeups include the
 capture command, traffic trigger, and display filters used for each scenario.
 
-These captures were taken on `en0` from macOS with `tcpdump`, then converted to
-pcapng. No custom dissectors were used.
+These captures were written as native pcapng files on `en0` with Wireshark's
+`dumpcap`. No custom dissectors were used.
 
 ## Notes
 

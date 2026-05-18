@@ -6,18 +6,21 @@ Capture file: `../captures/02-dns-resolution.pcapng`
 
 ## How the capture was made
 
-Target: `neverssl.com`; local resolver: `192.168.2.1`; A record:
-`34.223.124.45`.
+Target: `info.cern.ch`; local resolver: `192.168.2.1`; returned address:
+`188.184.67.127`.
 
 ```zsh
-tcpdump -i en0 -s 0 -n -w captures/02-dns-resolution.pcap \
-  "(udp port 53 or tcp port 53 or host 34.223.124.45)"
+dumpcap -i en0 -s 0 \
+  -w captures/02-dns-resolution.pcapng \
+  -a duration:8 \
+  -f \
+  "(udp port 53 or tcp port 53 or host 188.184.67.127)"
 
-dig neverssl.com A
+dig @192.168.2.1 info.cern.ch A
 
 curl -4 --http1.1 --no-keepalive \
-  --resolve neverssl.com:80:34.223.124.45 \
-  http://neverssl.com/
+  --resolve info.cern.ch:80:188.184.67.127 \
+  http://info.cern.ch/
 ```
 
 `dig` forces the DNS query into the capture. The curl command pins the TCP
@@ -28,33 +31,39 @@ connection to the same address returned by the query.
 DNS filter:
 
 ```text
-dns && dns.qry.name == "neverssl.com"
+dns && dns.qry.name == "info.cern.ch"
 ```
 
 The workstation asks the local resolver for an A record:
 
 ```text
-192.168.2.100:55125 -> 192.168.2.1:53  A? neverssl.com
-192.168.2.1:53 -> 192.168.2.100:55125  A 34.223.124.45
+192.168.2.100 -> 192.168.2.1  A? info.cern.ch
+192.168.2.1 -> 192.168.2.100  CNAME webafs902.cern.ch, A 188.184.67.127
 ```
 
 TCP filter:
 
 ```text
-ip.addr == 34.223.124.45 && tcp.port == 80
+ip.addr == 188.184.67.127 && tcp.port == 80
 ```
 
 The next connection goes to the returned IP:
 
 ```text
-192.168.2.100:56180 -> 34.223.124.45:80  SYN
-34.223.124.45:80 -> 192.168.2.100:56180  SYN-ACK
-192.168.2.100:56180 -> 34.223.124.45:80  ACK
-192.168.2.100:56180 -> 34.223.124.45:80  HTTP GET /
+192.168.2.100:58074 -> 188.184.67.127:80  SYN
+188.184.67.127:80 -> 192.168.2.100:58074  SYN-ACK
+192.168.2.100:58074 -> 188.184.67.127:80  ACK
+192.168.2.100:58074 -> 188.184.67.127:80  HTTP GET /
 ```
 
-The DNS answer does not move user data by itself. It supplies the address used
-by the transport-layer connection that follows.
+The DNS response is transaction `0x0d14` at `17:17:00.555887-0400`. The SYN to
+`188.184.67.127` follows about 16.6 ms later. The DNS answer does not move user
+data by itself; it supplies the address used by the transport-layer connection.
+
+One capture wrinkle is visible later in the stream: Wireshark marks frame 8 as
+`TCP Previous segment not captured`, then sees the HTTP `200 OK` as a
+retransmission in frame 10. That does not change the DNS-to-TCP relationship,
+but it is a useful reminder that packet captures can have their own gaps.
 
 ## Wireshark screenshots
 
